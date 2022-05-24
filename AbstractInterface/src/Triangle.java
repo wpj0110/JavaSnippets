@@ -1,4 +1,4 @@
-public class Triangle extends Shape implements Design{
+public class Triangle extends Shape implements Design, Rocket{
 
     //notice that it will need everything from the Design Interface and the Shape Abstract class.
     @Override
@@ -19,5 +19,10 @@ public class Triangle extends Shape implements Design{
     @Override
     int Area(int l1, int l2) {
         return l1*l2/2;
+    }
+
+    @Override
+    public void enableBoosters() {
+        System.out.println("Triangle Rocket Boosters Initiated");
     }
 }
