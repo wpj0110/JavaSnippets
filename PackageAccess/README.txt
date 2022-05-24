@@ -1,3 +1,5 @@
+Package1 contains Main
+
 Demo for the types of Access Modifiers:
 Private
 Default
