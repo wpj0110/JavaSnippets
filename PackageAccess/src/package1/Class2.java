@@ -17,4 +17,8 @@ class Class2 { //this is a default class. Accessible within the same package, bu
     protected static void protectedHello(){ //accessible ONLY within the same package (because of protected)
         System.out.println("Class2 protectedHello");
     }
+
+    void defaultHello(){
+        System.out.println("This is a default hello");
+    }
 }

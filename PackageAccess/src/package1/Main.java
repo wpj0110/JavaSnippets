@@ -17,5 +17,11 @@ public class Main {
         Class3 c3Obj = new Class3();
         c3Obj.hello1();
         Class3.hello2();
+
+        System.out.println("\nWe may use package components without importing the package itself.");
+        package3.Class4.hello();
+
+        Class5 c5Obj = new Class5();
+        c5Obj.hello();
     }
 }
