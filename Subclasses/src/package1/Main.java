@@ -1,7 +1,5 @@
 package package1;
 
-import java.awt.geom.PathIterator;
-
 public class Main {
     public static void main(String[] args) {
         Engineer engObj = new Engineer();
