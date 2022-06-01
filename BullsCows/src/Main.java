@@ -6,23 +6,11 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         StringBuilder randCode;
 
-        System.out.println("Input the length of the secret code: ");
-        int size = sc.nextInt();
+        int size = codeLength();
 
-        if (size > 36) {
-            System.out.println("Error: can't generate a secret code with a length of " + size + " because there aren't enough unique symbols.");
-            System.exit(1);
-        }
+        int possibleSymbols = symbolCount(size);
 
-        System.out.println("Input the number of possible symbols in the code:");
-        int possibleSymbols = sc.nextInt() - 1;
-
-        if (possibleSymbols > 36) {
-            System.out.println("Error: can't generate a secret code with a possible symbols of " + possibleSymbols + " because there aren't enough unique symbols.");
-            System.exit(1);
-        }
-
-        char lastSymbol = selection.charAt(possibleSymbols);
+        char lastSymbol = selection.charAt(possibleSymbols - 1);
 
         randCode = gen(size, possibleSymbols);
         System.out.println("The secret is prepared: " + "*".repeat(size) + " (0-" + (possibleSymbols > 10 ? ("9, " + "a-"+lastSymbol+").") : lastSymbol+")."));
@@ -39,6 +27,47 @@ public class Main {
         System.out.println("Congratulations! You guess the secret code.");
     }
 
+    public static Integer codeLength() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Input the length of the secret code: ");
+        String input = sc.next();
+
+        try {
+            if (Integer.parseInt(input) <= 0) {
+                throw new Exception("Error: Length of the secret code must be greater than or equal to 1");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Error: "+ input + " isn't a valid number");
+            System.exit(1);
+        } catch (Exception e) {
+            System.out.println("Error: "+ e.getMessage());
+            System.exit(1);
+        }
+        return Integer.parseInt(input);
+    }
+
+    public static Integer symbolCount(int size) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Input the number of possible symbols in the code:");
+        String input = sc.next();
+        try {
+            int temp = Integer.parseInt(input);
+            if (Integer.parseInt(input) <= 0) {
+                throw new Exception("Error: Length of the secret code must be greater than or equal to 1");
+            } else if (temp < size){
+                throw new ArithmeticException("Error: it's not possible to generate with a code with a length of " + size + " with " + input +" unique symbols");
+            } else if (temp > 36) {
+                throw new Exception("Error: maximum number of possible symbols in the code is 36 (0-9, a-z)");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Error: "+ input + " isn't a valid number");
+            System.exit(1);
+        } catch (Exception e) {
+            System.out.println("Error: "+ e.getMessage());
+            System.exit(1);
+        }
+        return Integer.parseInt(input);
+    }
     public static StringBuilder gen(int size, int possibleSymbols){
         StringBuilder randomCode = new StringBuilder();
         while (size != 0){
@@ -62,34 +91,42 @@ public class Main {
 
     public static boolean matcher(StringBuilder code, StringBuilder guess) {
         int bulls = 0, cows = 0;
-
-        for (int i = 0; i < code.length(); i++){
-            if (code.charAt(i) == guess.charAt(i)){
-                bulls += 1;
-                continue;
-            }
-            for (int j = 0; j < code.length(); j++){
-                if (code.charAt(j) == guess.charAt(i)){
-                    cows += 1;
-                    break;
+        try {
+            for (int i = 0; i < code.length(); i++){
+                if (code.charAt(i) == guess.charAt(i)){
+                    bulls += 1;
+                    continue;
+                }
+                for (int j = 0; j < code.length(); j++){
+                    if (code.charAt(j) == guess.charAt(i)){
+                        cows += 1;
+                        break;
+                    }
                 }
             }
-        }
-        System.out.print("Grade:");
-        if (bulls > 0) {
-            System.out.print(" "+bulls + (bulls == 1 ? " bull" : " bulls"));
-        }
-
-        if (cows > 0) {
+            System.out.print("Grade:");
             if (bulls > 0) {
-                System.out.print(" and");
+                System.out.print(" "+bulls + (bulls == 1 ? " bull" : " bulls"));
             }
-            System.out.print(" "+ cows + (cows == 1 ? " cow" : " cows"));
+
+            if (cows > 0) {
+                if (bulls > 0) {
+                    System.out.print(" and");
+                }
+                System.out.print(" "+ cows + (cows == 1 ? " cow" : " cows"));
+            }
+            if (cows == 0 && bulls == 0){
+                System.out.print(" None");
+            }
+            System.out.println();
+
+        } catch(IndexOutOfBoundsException e) {
+            System.out.println("Grader Error: Guess is of length " + guess.length() + ". It must be of length " + code.length() +".");
+            System.exit(1);
+        } catch (Exception e) {
+            System.out.println("Grader Error: "+e.getMessage());
+            System.exit(1);
         }
-        if (cows == 0 && bulls == 0){
-            System.out.print(" None");
-        }
-        System.out.println();
         return (bulls == code.length());
     }
 }
