@@ -37,6 +37,7 @@ public class PropertyFileReading {
 
             prop2.setProperty("Illinois", "Springfield"); //adds Illinois
             prop2.setProperty("Texas", "Dallas"); //adds Texas
+            prop2.setProperty("Illinois", "Blah"); //replaces Springfield
 
             prop2.store(new FileOutputStream("capitals.properties"), null);
         } catch (IOException ex) {
